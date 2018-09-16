@@ -1,0 +1,12 @@
+.grid line {
+    stroke: rgb(112, 108, 108);
+    stroke-opacity: 0.3;
+    shape-rendering: crispEdges;
+  }
+
+.grid .domain{
+    display: none;
+}
+svg > g.grid.y-axis > g:nth-child(2){
+    display:none;
+}

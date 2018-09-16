@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import * as d3 from "d3";
+import "./style.css";
 
 export default class Linechart extends Component{
     constructor(props){
@@ -29,6 +30,16 @@ export default class Linechart extends Component{
         svg.select(".y.axis").transition().duration(800).call(this.yAxis);
     }
 
+    make_x_gridlines() {		
+        return d3.axisBottom(this.scalex)
+            .ticks(this.props.tics)
+    }
+
+    make_y_gridlines() {		
+        return d3.axisLeft(this.scaleY)
+            .ticks(this.props.tics)
+    }
+
     componentDidMount(){
         let svg = d3.select(this.chartRef.current);
         svg.append("path")
@@ -49,6 +60,18 @@ export default class Linechart extends Component{
         svg.append("g")
         .attr("class", "y axis")
         .call(this.yAxis);
+
+        svg.append("g")
+        .attr("class", "grid x-axis")
+        .attr("transform", "translate(0," + this.props.height + ")")
+        .call(this.make_x_gridlines().tickSize(-(this.props.height-this.props.padding)).tickFormat(""))
+
+        svg.append("g")			
+            .attr("class", "grid y-axis")
+            .call(this.make_y_gridlines()
+                .tickSize(-(this.props.width-this.props.sidePadding))
+                .tickFormat("")
+            )
     }
 
     render(){
@@ -63,6 +86,7 @@ Linechart.defaultProps = {
     height:500,
     padding:50,
     sidePadding:140,
-    internalPadding:5
+    internalPadding:0,
+    tics: 8
 }
 
