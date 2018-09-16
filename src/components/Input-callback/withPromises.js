@@ -15,7 +15,7 @@ export default class WithPromises extends Component {
 
   render() {
     return (
-      <AsyncSelect onChange={this.props.onChange} cacheOptions defaultOptions loadOptions={this.props.promiseOptions} />
+      <AsyncSelect {...this.props} onChange={this.props.onChange} cacheOptions defaultOptions loadOptions={this.props.promiseOptions} />
     );
   }
 }
