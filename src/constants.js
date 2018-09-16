@@ -15,3 +15,5 @@ export const DATA_URL = (origin,destination,fromdate,todate) => `/api/rates/${or
 export const PORTS = (inputValue) =>`/api/ports/search/${inputValue}`
 
 export const DATE_FORMAT = "YYYY-MM-DD";
+
+export const DEFAULT_OPTIONS = [{value: "USNYC", label: "New York"},{value: "GBFXT",label: "Felixstowe"},{value: "NOOSL", label: "Oslo"}]
