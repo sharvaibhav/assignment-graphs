@@ -25,6 +25,7 @@
     "moment": "^2.22.2",
     "morgan": "~1.9.0",
     "nodemon": "^1.18.3",
+    "prop-types": "^15.6.2",
     "react": "^16.5.1",
     "react-dates": "^18.0.4",
     "react-dom": "^16.5.1",

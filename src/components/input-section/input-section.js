@@ -1,12 +1,12 @@
 import React,{Component} from 'react';
-import WithPromises from '../Input-callback/withPromises'
+import PropTypes from 'prop-types';
+import WithPromises from '../utility/withPromises'
 import axios from 'axios'
 import { DateRangePicker } from 'react-dates';
 import {PORTS} from '../../constants';
-import 'react-dates/lib/css/_datepicker.css';
-import './style.css'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import './style.css'
+import 'react-dates/lib/css/_datepicker.css';
 
 export default class Inputsection extends Component{
     
@@ -33,13 +33,13 @@ export default class Inputsection extends Component{
         });
         
     handleChangeTo =(val =>{
-        this.setState({to:val.value},()=>{
+        this.setState({to:val},()=>{
             this.props.updateInputState(this.state)
         })
     })
 
     handleChangeFrom =(val =>{
-        this.setState({from:val.value},()=>{
+        this.setState({from:val},()=>{
             this.props.updateInputState(this.state)
         })
     })
@@ -57,27 +57,27 @@ export default class Inputsection extends Component{
                     <div className="col-md-3 ">
                         <div className="row">
                             <div className=" input-text "> <FontAwesomeIcon icon="plane-departure" size="2x" />  </div> 
-                            <div className="input-box"><WithPromises placeholder="Origin" promiseOptions={this.promiseOptionsFrom} onChange={this.handleChangeFrom}/> </div>
+                            <div className="input-box"><WithPromises placeholder="Origin" defaultValue={this.props.defaultState.from} promiseOptions={this.promiseOptionsFrom} onChange={this.handleChangeFrom}/> </div>
                         </div>
                     </div>
 
                     <div className="col-md-3 ">
                         <div className="row">
                             <div className="input-text"> <FontAwesomeIcon icon="plane-arrival" size="2x" /> </div>
-                            <div className="input-box"><WithPromises placeholder="Destination" className="input-box" promiseOptions={this.promiseOptionsFrom} onChange={this.handleChangeTo}/> </div>
+                            <div className="input-box"><WithPromises placeholder="Destination" defaultValue={this.props.defaultState.to} className="input-box" promiseOptions={this.promiseOptionsFrom} onChange={this.handleChangeTo}/> </div>
                         </div>
                     </div>
-                    <div className="col-md-2 "> </div>
-                    <div className="col-md-4 ">
+                    <div className="col-md-1 "> </div>
+                    <div className="col-md-5 ">
                         <div className="row">
                             <div className="input-text"> <FontAwesomeIcon icon="clock" size="2x" /> </div>
                             <div className="input-box-dual">
                                 <DateRangePicker
                                     isOutsideRange={() => false}
                                     startDate={this.state.startDate} 
-                                    startDateId="your_unique_start_date_id"
+                                    startDateId="startDate"
                                     endDate={this.state.endDate} 
-                                    endDateId="your_unique_end_date_id"
+                                    endDateId="endDate"
                                     onDatesChange={this.updateDates} 
                                     focusedInput={this.state.focusedInput}
                                     onFocusChange={focusedInput => this.setState({ focusedInput })} 
@@ -86,9 +86,12 @@ export default class Inputsection extends Component{
                         </div>
                     </div>
                 </div>
-
-                
-
-                </div>);
+            </div>);
     }
+}
+
+Inputsection.propTypes = {
+    defaultState:  PropTypes.object,
+    updateInputState: PropTypes.func,
+
 }
