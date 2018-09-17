@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Inputsection from "./input-section/input-section"
-import Linechart from "./chart-components/linechart";
+import Linechart from "./chart-components/line-chart";
 import 'react-dates/initialize';
 import {FETCH_STATUS,DATA_URL, DATE_FORMAT,DEFAULT_OPTIONS} from '../constants';
 import moment from 'moment';
@@ -26,12 +26,18 @@ export default class App extends Component{
         this.getGraphData();
     }
 
+    /**
+     * Fetch the data only when its in fetch status
+     */
     componentDidUpdate(){
         if(this.state.fetchDataStatus === FETCH_STATUS.FETCH){
             this.getGraphData();
         }
     }
 
+    /**
+     * Function to get the graph data on the selected input
+     */
     getGraphData = ()=>{
         let {from,to,startDate,endDate} = this.state.inputState;
         startDate = startDate.format(DATE_FORMAT);
@@ -42,6 +48,9 @@ export default class App extends Component{
         },()=> this.setState({fetchDataStatus:FETCH_STATUS.REJECTED}))
     }
 
+    /**
+     * Updates the input state , passed as a call back to child components
+     */
     updateInputState = (newState) => {
         this.setState({inputState:newState,fetchDataStatus:FETCH_STATUS.FETCH})
     }

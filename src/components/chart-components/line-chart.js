@@ -7,10 +7,17 @@ export default class Linechart extends Component{
         super(props);
         this.updateScales();
         this.chartRef = React.createRef();
+        
     }
 
+    /**
+     * Line Drawinf function.
+     */
     line = d3.line().x(d=>this.scalex(new Date(d[0]))).y(d=> this.scaleY(d[1]));
 
+    /**
+     * Updates the scales on new values
+     */
     updateScales = ()=>{
         let min =  d3.min(this.props.rateData.map(e=>e[1])) -this.props.padding;
         let max = d3.max(this.props.rateData.map(e=>e[1])) + this.props.padding;
@@ -21,6 +28,9 @@ export default class Linechart extends Component{
         this.yAxis = d3.axisLeft(this.scaleY);
     }
 
+    /**
+     * Redrawing the chart on updates.
+     */
     componentDidUpdate(){
         this.updateScales();
         let svg = d3.select(this.chartRef.current);
@@ -30,20 +40,27 @@ export default class Linechart extends Component{
         svg.select(".y.axis").transition().duration(800).call(this.yAxis);
     }
 
-    make_x_gridlines() {		
+    /**
+     * Function to make x grid lines
+     */
+    makeXGridLines = () => {		
         return d3.axisBottom(this.scalex)
             .ticks(this.props.tics)
     }
 
-    make_y_gridlines() {		
+    /**
+     * function to make y grid lines
+     */
+    makeYGridLines = () => {		
         return d3.axisLeft(this.scaleY)
             .ticks(this.props.tics)
     }
 
-    componentDidMount(){
-        let svg = d3.select(this.chartRef.current);
-        
-        svg.append("path")
+    /**
+     * Creates the line chart
+     */
+    makeLine = ()=>{
+        this.svg.append("path")
             .attr("class", "line")
             .datum(this.props.rateData)
             .attr("fill", "none")
@@ -52,41 +69,52 @@ export default class Linechart extends Component{
             .attr("stroke-linecap", "round")
             .attr("stroke-width", 3)
             .attr("d", this.line);
-
-        svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + this.props.height + ")")
-        .call(this.xAxis)
-        .append("text")
-        // .attr("transform", "rotate(90)")
-        .attr("y", -10)
-        .attr("x", this.props.width-160)
-        // .style("text-anchor", "end")
-        .attr("fill", "#5D6971")
-        .text("(Time)");
-
-        svg.append("g")
-        .attr("class", "y axis")
-        .call(this.yAxis)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 16)
-        .attr("x", -30)
-        .style("text-anchor", "end")
-        .attr("fill", "#5D6971")
-        .text("(Rates)");
-
-        svg.append("g")
+    }
+    /**
+     *Creates the Axis
+     */
+    makeAxis = ()=>{
+        this.svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + this.props.height + ")")
+            .call(this.xAxis)
+            .append("text")
+            .attr("y", -10)
+            .attr("x", this.props.width-160)
+            .attr("fill", "#5D6971")
+            .text("(Time)");
+        this.svg.append("g")
+            .attr("class", "y axis")
+            .call(this.yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 16)
+            .attr("x", -30)
+            .style("text-anchor", "end")
+            .attr("fill", "#5D6971")
+            .text("(Rates)");
+    }
+    /**
+     * Create the Grid Lines
+     */
+    makeGridLine = ()=>{
+        this.svg.append("g")
         .attr("class", "grid x-axis")
         .attr("transform", "translate(0," + this.props.height + ")")
-        .call(this.make_x_gridlines().tickSize(-(this.props.height-this.props.padding)).tickFormat(""))
+        .call(this.makeXGridLines().tickSize(-(this.props.height-this.props.padding)).tickFormat(""))
 
-        svg.append("g")			
+        this.svg.append("g")			
             .attr("class", "grid y-axis")
-            .call(this.make_y_gridlines()
-                .tickSize(-(this.props.width-this.props.sidePadding))
-                .tickFormat("")
-            );
+            .call(this.makeYGridLines().tickSize(-(this.props.width-this.props.sidePadding)).tickFormat(""));
+    }
+    /**
+     * First creation of the Line chart
+     */
+    componentDidMount(){
+        this.svg = d3.select(this.chartRef.current);
+        this.makeLine();
+        this.makeAxis();
+        this.makeGridLine();
     }
 
     render(){

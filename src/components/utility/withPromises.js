@@ -7,11 +7,17 @@ import PropTypes from 'prop-types';
 export default class WithPromises extends Component {
   state = { inputValue: '' };
 
+  /**
+   * function to check for the length of input characters before calling promiseoptions
+   */
   promiseOptions =  (inputValue)=>{
     if(inputValue.length>2)
       return this.props.promiseOptions(inputValue)
   }
 
+  /**
+   * function called when selection changes
+   */
   onChange = (element)=>{
     if(Object.keys(element).length > 0)
       this.props.onChange(element);
@@ -31,8 +37,4 @@ export default class WithPromises extends Component {
 WithPromises.propTypes={
   onChange:PropTypes.func,
   promiseOptions: PropTypes.func
-}
-
-WithPromises.defaultProps={
-  defaultIndex:0
 }

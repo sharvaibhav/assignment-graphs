@@ -25,25 +25,36 @@ export default class Inputsection extends Component{
         this.setState({...this.props.defaultState});
     }
 
+    /**
+     * Function return promise to get ports option on free text
+     */
     promiseOptionsFrom = inputValue => axios.get(PORTS(inputValue)).then(res => {
            if(res.data && res.data.results)
                 return res.data.results.map(entry => {
                     return {label: entry.name, value:entry.id}
                 });
         });
-        
+    /**
+     * Handler for value change for TO
+     */
     handleChangeTo =(val =>{
         this.setState({to:val},()=>{
             this.props.updateInputState(this.state)
         })
     })
 
+    /**
+     * Handler for value change for from
+     */
     handleChangeFrom =(val =>{
         this.setState({from:val},()=>{
             this.props.updateInputState(this.state)
         })
     })
 
+    /**
+     * Update Dates to parent state
+     */
     updateDates = ({ startDate, endDate }) => {
         this.setState({ startDate, endDate: endDate ? endDate : this.state.endDate },()=>{
             this.props.updateInputState(this.state)
