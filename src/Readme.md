@@ -1,5 +1,7 @@
 # The UI Cretion assumptions
 * Taken 3 default options for the drop downs.
+* Created a Contants file to keep some constant data and templated URL for endpoints.
+* I didnt used redux as fealt it would be overdo for such a small apllication.
 * We can search in the drop-downs.
 * We can change the duration from the Duration selector
 * Change the value the graph updates itself, no need to submit a button.
