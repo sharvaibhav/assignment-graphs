@@ -1,21 +1,19 @@
 import React, {Component} from 'react';
 import Inputsection from "./input-section/input-section"
-import Linegraph from "./line-graph/line-graph";
-
+import Linechart from "./chart-components/line-chart";
 import 'react-dates/initialize';
-import {FETCH_STATUS,DATA_URL, DATE_FORMAT} from '../constants';
-
+import {FETCH_STATUS,DATA_URL, DATE_FORMAT,DEFAULT_OPTIONS} from '../constants';
 import moment from 'moment';
-
 import axios from "axios";
+
 
 export default class App extends Component{
     constructor(props){
         super(props);
         this.state={
             inputState:{
-                from:"NOOSL",
-                to:"CNSTG",
+                from:DEFAULT_OPTIONS[0],
+                to:DEFAULT_OPTIONS[1],
                 startDate:moment("2018-05-30", "YYYY-MM-DD"),
                 endDate:moment("2018-07-01", "YYYY-MM-DD")
             },
@@ -28,35 +26,41 @@ export default class App extends Component{
         this.getGraphData();
     }
 
+    /**
+     * Fetch the data only when its in fetch status
+     */
     componentDidUpdate(){
         if(this.state.fetchDataStatus === FETCH_STATUS.FETCH){
             this.getGraphData();
         }
     }
-    
 
+    /**
+     * Function to get the graph data on the selected input
+     */
     getGraphData = ()=>{
         let {from,to,startDate,endDate} = this.state.inputState;
         startDate = startDate.format(DATE_FORMAT);
         endDate = endDate.format(DATE_FORMAT);
         this.setState({fetchDataStatus:FETCH_STATUS.FETCHED});
-        axios.get(DATA_URL(from,to,startDate,endDate)).then((res)=>{
+        axios.get(DATA_URL(from.value,to.value,startDate,endDate)).then((res)=>{
             this.setState({rateData:res.data.rates,fetchDataStatus:FETCH_STATUS.FETCHED})
         },()=> this.setState({fetchDataStatus:FETCH_STATUS.REJECTED}))
     }
 
+    /**
+     * Updates the input state , passed as a call back to child components
+     */
     updateInputState = (newState) => {
-        console.log(newState);
         this.setState({inputState:newState,fetchDataStatus:FETCH_STATUS.FETCH})
     }
 
     render(){
         return (<div className="container">
-
-            <Inputsection updateInputState={this.updateInputState} defaultState={this.state.inputState}/>   
-            {this.state.rateData && 
-                <Linegraph startDate={this.state.inputState.startDate} endDate={this.state.inputState.endDate} rateData ={this.state.rateData}/>}
-         
-         </div>);
+                    <Inputsection updateInputState={this.updateInputState} defaultState={this.state.inputState}/>   
+                    {this.state.rateData && 
+                        <Linechart inputState = {this.state.inputState}
+                                    rateData ={this.state.rateData}/>}
+                </div>);
     }
 }
