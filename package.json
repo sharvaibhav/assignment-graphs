@@ -5,7 +5,9 @@
   "scripts": {
     "build": "webpack --config webpack.config.js --mode development",
     "start": "node ./bin/www",
-    "watch": "npm run build -- --watch & nodemon npm start"
+    "watch": "npm run build -- --watch & nodemon npm start",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
@@ -47,6 +49,12 @@
     "@babel/plugin-syntax-import-meta": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^8.0.0"
+    "babel-loader": "^8.0.0",
+    "@storybook/react": "^3.4.11",
+    "@storybook/addon-actions": "^3.4.11",
+    "@storybook/addon-links": "^3.4.11",
+    "@storybook/addons": "^3.4.11",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0"
   }
 }
